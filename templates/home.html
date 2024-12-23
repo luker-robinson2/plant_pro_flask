@@ -1,0 +1,22 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask HTML Example</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <h1>Water My Plants Please</h1>
+    <div id="plantArea">
+        <form method="post" action="/submit">
+            <button type="submit">Send POST Request</button>
+          </form>
+    </div>
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
+
+</body>
+</html>

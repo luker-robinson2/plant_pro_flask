@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', Courier, monospace;
+    min-height: 100vh;
+    display: flex; /* Use flexbox for layout */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    font-size: 3rem;
+    background-color: rgb(24, 23, 23);
+    color: whitesmoke;
+    padding: 20px; /* Add some padding around the edges */
+    text-align: center; /* Center text alignment by default */
+    flex-direction: column; /* Stack elements vertically */
+}
+button {
+    width: 95%;
+    padding: 10px;
+    font-size: 2rem;
+    background-color: rgb(24, 23, 23);
+    color: whitesmoke;
+    font-family: 'Courier New', Courier, monospace;
+    border: 2px solid #ccc;
+    text-align: center; /* Center text within the input */
+    margin-bottom: 10px; /* Add space below the input */
+}
