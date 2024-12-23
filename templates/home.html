@@ -1,4 +1,3 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flask HTML Example</title>
     <link rel="stylesheet" href="static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <h1>Water My Plants Please</h1>
@@ -15,32 +15,86 @@
         </p>
         <form method="post" action="/submit">
             <button type="submit">Send water to my poor plants</button>
-          </form>
-          <div id="sensor-readings">
-
-          </div>
+        </form>
+        <div id="sensor-readings"></div>
+        <div>
+            <canvas id="myChart"></canvas>
+        </div>
     </div>
-
-    <!-- {% if message %}
-    <p>{{ message }}</p>
-    {% endif %} -->
-
 </body>
-<!-- The script below implements short polling, so that the displayed information is correct -->
 <script>
+    const humidityData = [];
+    const sunlightData = [];
+    const MAX_ENTRIES = 20;
+
+    const chartConfig = {
+        type: 'line',
+        data: {
+            labels: Array.from({ length: MAX_ENTRIES }, (_, i) => i + 1),
+            datasets: [
+                {
+                    label: 'Humidity',
+                    data: humidityData,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: true
+                },
+                {
+                    label: 'Sunlight',
+                    data: sunlightData,
+                    borderColor: 'rgb(255, 159, 64)',
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Reading Number'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Sensor Values'
+                    }
+                }
+            }
+        }
+    };
+
+    // Corrected typo in method name: `getElementById`
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, chartConfig);
+
     function fetchData() {
-        let plantID = 1
-        const url = `/get-sensor-data`;
-        fetch('/get-sensor-data')//get request to server
-            .then(response => response.json())//response stored as json
-            .then(data => {//access the json data here
-                console.log(data);  // Here you can log or update the HTML with sensor data
-                document.getElementById('sensor-readings').innerHTML = '<p>Humidity: '  + data.humidity + '</p>'+'<p>Sunlight: '  + data.sunlight + '</p>'+ '<p>Timstamp: '  + data.timestamp + '</p>';
+        fetch('/get-sensor-data') // GET request to server
+            .then(response => response.json()) // Response stored as JSON
+            .then(data => {
+                // Update sensor readings in HTML
+                document.getElementById('sensor-readings').innerHTML =
+                    `<p>Humidity: ${data.humidity}</p>` +
+                    `<p>Sunlight: ${data.sunlight}</p>` +
+                    `<p>Timestamp: ${data.timestamp}</p>`;
+
+                // Update chart data
+                if (humidityData.length >= MAX_ENTRIES) {
+                    humidityData.shift();
+                    sunlightData.shift();
+                }
+                humidityData.push(data.humidity);
+                sunlightData.push(data.sunlight);
+                myChart.update();
             })
             .catch(error => console.error('Error fetching data:', error));
     }
-    setInterval(fetchData, 1000);//poll the server every 1 seconds
+
+    // Poll the server every second
+    setInterval(fetchData, 1000);
 </script>
-
-
 </html>

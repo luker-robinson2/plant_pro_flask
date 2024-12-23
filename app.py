@@ -9,7 +9,7 @@ from makeDB import init_db, clear_db, takeReading, getReading
 app = Flask(__name__)
 
 app.secret_key = secrets.token_hex(16)
-
+clear_db()
 init_db()
 
 @app.route("/", methods=["GET", "POST"])  # Allow both GET and POST methods

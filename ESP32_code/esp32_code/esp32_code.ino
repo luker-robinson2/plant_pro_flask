@@ -4,11 +4,11 @@
 #include <String.h>
 
 // Replace with your Wi-Fi credentials
-const char* ssid = "wifiname";
-const char* password = "wifipswd";
+const char* ssid = "";
+const char* password = "";
 const char* plantID = "1";
 // The IP address of the machine running the Flask server (replace with your local IP)
-const char* serverUrl = "http://ipaddr:5000/sensor";
+const char* serverUrl = "http://ip:5000/sensor";
 const int ledPin = 2; // Define the GPIO pin connected to your LED
 
 

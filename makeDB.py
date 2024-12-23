@@ -129,7 +129,35 @@ def clear_db():
     
     conn.commit()
     conn.close()
+    print(f"get database size: {get_database_size()}")
     print("Database cleared!")
+
+def get_database_size():
+    try:
+        # Connect to the SQLite database
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+
+        # Get page size and page count
+        cursor.execute("PRAGMA page_size;")
+        page_size = cursor.fetchone()[0]
+
+        cursor.execute("PRAGMA page_count;")
+        page_count = cursor.fetchone()[0]
+
+        # Calculate total size
+        total_size = page_size * page_count
+
+        print(f"Page Size: {page_size} bytes")
+        print(f"Page Count: {page_count}")
+        print(f"Total Size: {total_size} bytes")
+
+        conn.close()
+
+        return total_size
+    except sqlite3.Error as e:
+        print(f"SQLite error: {e}")
+        return None
 
 # Call the function to initialize the database and perform test actions
 # init_db()
